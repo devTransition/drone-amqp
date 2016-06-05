@@ -1,33 +1,65 @@
 # drone-amqp
 
-## install vendor packages
+## Using with drone:0.4
+
+Image is available on Docker Hub
+
+```
+docker pull valichek/drone-amqp:0.4
+```
+
+It is not official plugin so use PLUGIN_FILTER env variable to allow it for Drone
+```
+PLUGIN_FILTER="plugins/* valichek/drone-amqp"
+```
+
+Add following to `.drone.yaml` to send amqp message when build finished
+
+```yaml
+notify:
+  amqp:
+    image: valichek/drone-amqp:0.4
+    Connection: 
+      Host: "192.168.99.100"
+      Username: "guest"
+      Password: "guest"
+    Exchange: "rpc.test"
+    Key: "routing.key.namespace"
+    Publishing: 
+      ContentType: "application/x-json"
+      DeliveryMode: 1
+    Template: >
+      { "repo": "{{repo.full_name}}", "build": {{build.number}}, "commit": "{{build.commit}}"
+```
+
+Please, check [types.go](types.go) for available parameters.
+
+## Dev notes
+
+### Install vendor packages
 
 Use https://github.com/govend/govend
 
-Get dependencies running: 
+Get dependencies: 
 ```sh
 govend -v --prune
 ```
 
-## build
+### Building image
+
+Build binary:
 
 ```sh
 GOOS=linux GOARCH=amd64 CGO_ENABLED=0 GO15VENDOREXPERIMENT=1 go build -ldflags '-s -w' -o drone-amqp
 ```
 
+Build 
 ```sh
-docker build --rm -t local/drone-amqp .
+docker build --rm -t valichek/drone-amqp .
 ```
 
-## Run as drone plugin
+### Running
 
-Use PLUGIN_FILTER env variable to allow running of `local/drone-amqp` docker image
-```
-PLUGIN_FILTER="plugins/* local/*"
-```
-
-
-## testing
 ```sh
 GO15VENDOREXPERIMENT=1 go run main.go types.go amqp.go < test.json
 ```
