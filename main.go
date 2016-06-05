@@ -1,25 +1,14 @@
 package main
 
 import (
-  //"crypto/tls"
-  //"encoding/json"
   "fmt"
-  //"io/ioutil"
-  //"net/http"
-  //"net/url"
   "github.com/drone/drone-go/drone"
   "github.com/drone/drone-go/plugin"
   "github.com/drone/drone-go/template"
-  //"github.com/coreos/coreos-kubernetes/multi-node/aws/_gopath-vendor/src/golang.org/x/tools/cmd/vet/testdata/divergent"
   "bytes"
   "os"
   "github.com/streadway/amqp"
   "log"
-)
-
-const (
-  respFormat = "Webhook %d\n  URL: %s\n  RESPONSE STATUS: %s\n  RESPONSE BODY: %s\n"
-  debugRespFormat = "Webhook %d\n  URL: %s\n  METHOD: %s\n  HEADERS: %s\n  REQUEST BODY: %s\n  RESPONSE STATUS: %s\n  RESPONSE BODY: %s\n"
 )
 
 var (
